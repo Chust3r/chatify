@@ -1,4 +1,5 @@
 import { currentProfilePages } from '@/lib/current-profile-pages'
+import { db } from '@/lib/prisma'
 import { NextApiResponseServerIo } from '@/types/types'
 import { NextApiRequest } from 'next'
 
@@ -9,13 +10,66 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
 	try {
 		const profile = await currentProfilePages(req)
 
+		const { content } = req.body
+		const { groupId } = req.query
+
 		if (!profile) {
 			return res.status(401).json({ error: 'Unauthoraized' })
 		}
 
+		//→ TODO Validations
+
+		const group = await db.group.findFirst({
+			where: {
+				id: groupId as string,
+				members: {
+					some: {
+						profileId: profile.id,
+					},
+				},
+			},
+		})
+
+		if (!group) {
+			return res.status(404).json({ message: 'Group not found' })
+		}
+
+		// → TODO Check if exist a conversation, if not exist create it
+
+		const conversation = await db.conversation.upsert({
+			where: {
+				groupId: groupId as string,
+				type: 'grupal',
+			},
+			create: {
+				groupId: groupId as string,
+				type: 'grupal',
+			},
+			update: {},
+		})
+
+		// →
+
+		const message = await db.conversation.update({
+			where: {
+				groupId: groupId as string,
+				type: 'grupal',
+			},
+			data: {
+				messages: {
+					create: [{ content: content, senderId: profile.id }],
+				},
+			},
+			include: {
+				messages: true,
+			},
+		})
+
+		console.log(message)
+
 		const key = `chat:${profile.id}:messages`
 
-		res.socket.server.io.emit(key, 'Hola')
+		// res.socket.server.io.emit(key, 'Hola')
 
 		return res.status(200).json({ key })
 	} catch (e) {

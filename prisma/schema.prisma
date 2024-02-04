@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  output = "/types/prisma-types.ts"
 }
 
 datasource db {
@@ -51,6 +52,7 @@ model Group{
   profile Profile @relation(fields: [profileId],references: [id],onDelete: Cascade)
 
   members Member[]
+  conversation Conversation?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -70,7 +72,7 @@ model Member {
   // → RELATIONS
 
   groupId String
-  group Group @relation(fields: [groupId],references: [id])
+  group Group @relation(fields: [groupId],references: [id],onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -87,7 +89,7 @@ model Message{
 
   // → RELATIONS
   conversationId String
-  conversation Conversation @relation(fields: [conversationId],references: [id])
+  conversation Conversation @relation(fields: [conversationId],references: [id],onDelete: Cascade)
 
   senderId String
   sender Profile @relation(fields: [senderId],references: [id])
@@ -104,12 +106,17 @@ model Message{
 
 model Conversation{
   id String @id @default(uuid())
-  type String 
+  type String
 
   messages Message[]
 
+  groupId String @unique
+  group Group @relation(fields: [groupId],references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([groupId])
 }
  
 
