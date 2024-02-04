@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev"
+}
+
+
+
+model Profile {
+  id String @id @default(uuid())
+  userId String @unique
+  name String
+  imageUrl String 
+  email String
+
+  // → RELATIONS 
+
+  friends Friend[]
+  members Member[]
+  groups Group[]
+  messages Message[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model Friend {
+  id String @id @default(uuid())
+  profileId String
+  profile Profile @relation(fields: [profileId],references: [id],onDelete: Cascade)
+
+  @@index([profileId])
+}
+
+
+model Group{
+  id String @id @default(uuid())
+  name String
+  inviteCode String
+
+  // → RELATIONS 
+
+  profileId String
+  profile Profile @relation(fields: [profileId],references: [id],onDelete: Cascade)
+
+  members Member[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([profileId])
+}
+
+ 
+// → role ADMIN / GUEST
+
+model Member {
+  id String @id @default(uuid())
+  profileId String
+  profile Profile @relation(fields: [profileId],references: [id],onDelete: Cascade)
+  role String
+
+  // → RELATIONS
+
+  groupId String
+  group Group @relation(fields: [groupId],references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([profileId])
+  @@index([groupId])
+}
+
+
+model Message{
+  id String @id @default(uuid())
+  content String
+  fileUrl String?
+
+  // → RELATIONS
+  conversationId String
+  conversation Conversation @relation(fields: [conversationId],references: [id])
+
+  senderId String
+  sender Profile @relation(fields: [senderId],references: [id])
+
+  deleted Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([conversationId])
+  @@index([senderId])
+}
+
+//→ Type Individual / Grupal
+
+model Conversation{
+  id String @id @default(uuid())
+  type String 
+
+  messages Message[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+ 
+
+
