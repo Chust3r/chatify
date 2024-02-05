@@ -1,4 +1,5 @@
 'use client'
+import { useSocket } from '@/providers/socket-provider'
 import { yupResolver } from '@hookform/resolvers/yup'
 import axios from 'axios'
 import qs from 'query-string'
@@ -48,6 +49,13 @@ export const ChatInput = ({ apiUrl, query, type }: Props) => {
 	}
 
 	const isLoading = form.formState.isSubmitting
+
+	const { socket } = useSocket()
+
+	socket?.on(
+		'chat:94e7e46b-9b4d-41a6-9271-128c9bdfc7cc:messages',
+		(data: any) => console.log(data)
+	)
 
 	return (
 		<Form {...form}>

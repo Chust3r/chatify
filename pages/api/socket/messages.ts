@@ -50,26 +50,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
 
 		// →
 
-		const message = await db.conversation.update({
-			where: {
-				groupId: groupId as string,
-				type: 'grupal',
-			},
+		if (!conversation) {
+			return res.status(404).json({ message: 'Conversation missing' })
+		}
+
+		const message = await db.message.create({
 			data: {
-				messages: {
-					create: [{ content: content, senderId: profile.id }],
-				},
+				content: content as string,
+				conversationId: conversation.id,
+				senderId: profile.id,
 			},
 			include: {
-				messages: true,
+				sender: true,
 			},
 		})
 
-		console.log(message)
+		const key = `chat:${groupId}:messages`
 
-		const key = `chat:${profile.id}:messages`
-
-		// res.socket.server.io.emit(key, 'Hola')
+		res.socket.server.io.emit(key, message)
 
 		return res.status(200).json({ key })
 	} catch (e) {

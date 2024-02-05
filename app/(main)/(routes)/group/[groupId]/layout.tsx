@@ -39,6 +39,7 @@ const GroupLayout = async ({ children, params }: Props) => {
 							sender: {
 								select: {
 									email: true,
+									imageUrl: true,
 								},
 							},
 						},
@@ -53,13 +54,19 @@ const GroupLayout = async ({ children, params }: Props) => {
 	}
 
 	return (
-		<div className='w-full bg-red-50 h-full overflow-y-auto'>
+		<div className='w-full bg-red-50 h-full overflow-y-auto px-5 pt-3'>
 			<div>{group.name}</div>
 			<main>{children}</main>
 			<div>Members {group.members.length}</div>
-			<pre>{JSON.stringify(group.members, null, 4)}</pre>
 			<h2>Messages</h2>
-			<pre>{JSON.stringify(group.conversation?.messages, null, 4)}</pre>
+			<div className='flex flex-col gap-3'>
+				{group.conversation?.messages.map((message) => (
+					<div key={message.id} className='flex flex-col'>
+						<p>{message.content}</p>
+						<span className='text-xs'>{message.sender.email}</span>
+					</div>
+				))}
+			</div>
 		</div>
 	)
 }
