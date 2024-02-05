@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 interface Props {
@@ -8,12 +8,7 @@ interface Props {
 }
 
 export const QueryProvider = ({ children }: Props) => {
-	const [client, setClient] = useState(new QueryClient())
-
-	useEffect(() => {
-		setClient(new QueryClient())
-		console.log('[Query Client Provider]')
-	}, [])
+	const [client] = useState(new QueryClient())
 
 	return <QueryClientProvider client={client}>{children}</QueryClientProvider>
 }

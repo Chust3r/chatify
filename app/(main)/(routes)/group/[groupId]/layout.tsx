@@ -59,14 +59,6 @@ const GroupLayout = async ({ children, params }: Props) => {
 			<main>{children}</main>
 			<div>Members {group.members.length}</div>
 			<h2>Messages</h2>
-			<div className='flex flex-col gap-3'>
-				{group.conversation?.messages.map((message) => (
-					<div key={message.id} className='flex flex-col'>
-						<p>{message.content}</p>
-						<span className='text-xs'>{message.sender.email}</span>
-					</div>
-				))}
-			</div>
 		</div>
 	)
 }
