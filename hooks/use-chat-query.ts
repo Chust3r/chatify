@@ -5,11 +5,13 @@ import { useInfiniteQuery } from 'react-query'
 interface Props {
 	queryKey: string
 	apiUrl: string
-	paramKey: string
-	paramValue: string
+	query: {
+		groupId: string
+		[key: string]: string
+	}
 }
 
-const useChatQuery = ({ apiUrl, paramKey, paramValue, queryKey }: Props) => {
+const useChatQuery = ({ apiUrl, query, queryKey }: Props) => {
 	const { isConnected } = useSocket()
 
 	// → FETCH MESSAGES
@@ -20,7 +22,7 @@ const useChatQuery = ({ apiUrl, paramKey, paramValue, queryKey }: Props) => {
 				url: apiUrl,
 				query: {
 					cursor: pageParam,
-					[paramKey]: paramValue,
+					...query,
 				},
 			},
 			{ skipNull: true }
@@ -36,7 +38,7 @@ const useChatQuery = ({ apiUrl, paramKey, paramValue, queryKey }: Props) => {
 			queryKey: [queryKey],
 			queryFn: fetchMessages,
 			getNextPageParam: (lastPage) => lastPage?.nextCursor,
-			/* refetchInterval: isConnected ? false : 1000, */
+			refetchInterval: isConnected ? false : 1000,
 		})
 
 	return {

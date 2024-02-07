@@ -9,7 +9,10 @@ import { Input } from './ui/input'
 
 interface Props {
 	apiUrl: string
-	query: Record<string, any>
+	query: {
+		groupId: string
+		[key: string]: string
+	}
 	type: 'grupal' | 'individual'
 }
 

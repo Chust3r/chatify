@@ -4,7 +4,7 @@ import { db } from './prisma'
 export const globalGroup = async (id: string) => {
 	const group = await db.group.findFirst({
 		where: {
-			id: '94e7e46b-9b4d-41a6-9271-128c9bdfc7cc',
+			id: '2a657b68-5e1e-4c87-958a-e47408c9a537',
 			members: {
 				some: {
 					profileId: id,
@@ -13,15 +13,13 @@ export const globalGroup = async (id: string) => {
 		},
 	})
 
-	if (group) {
-		return redirect(`/group/${group.id}`)
-	}
+	if (group) return
 
 	//→ TODO add a current user to global group
 
 	await db.group.update({
 		where: {
-			id: '94e7e46b-9b4d-41a6-9271-128c9bdfc7cc',
+			id: '2a657b68-5e1e-4c87-958a-e47408c9a537',
 		},
 		data: {
 			members: {

@@ -34,21 +34,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
 			return res.status(404).json({ message: 'Group not found' })
 		}
 
-		// → TODO Check if exist a conversation, if not exist create it
-
-		const conversation = await db.conversation.upsert({
+		const conversation = await db.conversation.findUnique({
 			where: {
 				groupId: groupId as string,
-				type: 'grupal',
 			},
-			create: {
-				groupId: groupId as string,
-				type: 'grupal',
-			},
-			update: {},
 		})
-
-		// →
 
 		if (!conversation) {
 			return res.status(404).json({ message: 'Conversation missing' })

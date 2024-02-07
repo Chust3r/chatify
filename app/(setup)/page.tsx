@@ -1,7 +1,6 @@
-import { Indicator } from '@/components/indicator'
-import { Messages } from '@/components/messages'
 import { globalGroup } from '@/lib/add-global'
 import { initialProfile } from '@/lib/initial-profile'
+import { Sidebar } from '@/components/sidebar'
 
 const SetuPage = async () => {
 	const profile = await initialProfile()
@@ -12,8 +11,7 @@ const SetuPage = async () => {
 
 	return (
 		<div>
-			<Indicator />
-			<Messages />
+			<Sidebar />
 		</div>
 	)
 }

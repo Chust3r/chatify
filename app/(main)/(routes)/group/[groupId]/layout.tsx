@@ -54,11 +54,8 @@ const GroupLayout = async ({ children, params }: Props) => {
 	}
 
 	return (
-		<div className='w-full bg-red-50 h-full overflow-y-auto px-5 pt-3'>
-			<div>{group.name}</div>
-			<main>{children}</main>
-			<div>Members {group.members.length}</div>
-			<h2>Messages</h2>
+		<div className='w-full h-full overflow-y-auto px-5 pt-3 flex flex-col bg-white'>
+			<main className='flex-1'>{children}</main>
 		</div>
 	)
 }

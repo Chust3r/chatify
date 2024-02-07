@@ -1,29 +1,48 @@
 import { ChatInput } from '@/components/chat-input'
 import { ChatMessages } from '@/components/chat-messages'
+import { currentProfile } from '@/lib/current-profile'
+import { db } from '@/lib/prisma'
 
 interface Props {
-	params: { slug: string }
+	params: { groupId: string }
 }
 
 const GroupId = async ({ params }: Props) => {
+	const { groupId } = params
+
+	const group = await db.group.findFirst({
+		where: {
+			id: groupId,
+		},
+		include: {
+			conversation: true,
+		},
+	})
+
+	const data = await currentProfile()
+
+	if (!data) {
+		return
+	}
+
+	if (!group?.conversation?.id) return
+
 	return (
 		<>
 			<ChatMessages
 				apiUrl='/api/messages'
-				socketUrl='/api/socket/messages'
-				socketQuery={{
-					groupId: params.slug,
+				query={{
+					groupId,
+					conversationId: group.conversation.id,
 				}}
-				paramKey='conversationId'
-				paramValue='c7670f25-60ba-4a45-b2c1-536b93b32f12'
 				name='Global chat'
-				type='_conversation'
-				chatId='xd'
+				type='conversation'
+				_data={data}
 			/>
 			<ChatInput
 				apiUrl='/api/socket/messages'
 				query={{
-					groupId: '94e7e46b-9b4d-41a6-9271-128c9bdfc7cc',
+					groupId,
 				}}
 				type='grupal'
 			/>
