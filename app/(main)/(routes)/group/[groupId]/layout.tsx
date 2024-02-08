@@ -27,25 +27,8 @@ const GroupLayout = async ({ children, params }: Props) => {
 			},
 		},
 		include: {
-			members: {
-				select: {
-					profileId: true,
-				},
-			},
-			conversation: {
-				include: {
-					messages: {
-						include: {
-							sender: {
-								select: {
-									email: true,
-									imageUrl: true,
-								},
-							},
-						},
-					},
-				},
-			},
+			conversation: true,
+			members: true,
 		},
 	})
 
@@ -53,11 +36,7 @@ const GroupLayout = async ({ children, params }: Props) => {
 		return redirect('/')
 	}
 
-	return (
-		<div className='w-full h-full overflow-y-auto px-5 pt-3 flex flex-col bg-white'>
-			<main className='flex-1'>{children}</main>
-		</div>
-	)
+	return <>{children}</>
 }
 
 export default GroupLayout

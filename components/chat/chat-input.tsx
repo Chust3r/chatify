@@ -1,11 +1,13 @@
 'use client'
 import { yupResolver } from '@hookform/resolvers/yup'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 import qs from 'query-string'
 import { useForm } from 'react-hook-form'
 import * as y from 'yup'
-import { Form, FormField, FormItem } from './ui/form'
-import { Input } from './ui/input'
+import { EmojiPicker } from '../emoji-picker'
+import { Form, FormField, FormItem } from '../ui/form'
+import { Input } from '../ui/input'
 
 interface Props {
 	apiUrl: string
@@ -32,6 +34,8 @@ export const ChatInput = ({ apiUrl, query, type }: Props) => {
 		defaultValues,
 	})
 
+	const router = useRouter()
+
 	const { control, handleSubmit, reset } = form
 
 	const onSumbit = async (data: FormType) => {
@@ -44,6 +48,7 @@ export const ChatInput = ({ apiUrl, query, type }: Props) => {
 			await axios.post(url, data)
 
 			reset()
+			router.refresh()
 		} catch (e) {
 			console.log(e)
 		}
@@ -58,8 +63,19 @@ export const ChatInput = ({ apiUrl, query, type }: Props) => {
 					control={control}
 					name='content'
 					render={({ field }) => (
-						<FormItem>
-							<Input {...field} disabled={isLoading} />
+						<FormItem className='relative'>
+							<Input
+								{...field}
+								disabled={isLoading}
+								className='pr-16 focus:ring-0'
+							/>
+							<div className='absolute top-0 right-8'>
+								<EmojiPicker
+									onChange={(emoji: string) =>
+										field.onChange(`${field.value}${emoji}`)
+									}
+								/>
+							</div>
 						</FormItem>
 					)}
 				/>

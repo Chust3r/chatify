@@ -5,7 +5,7 @@ interface Props {
 }
 const MainLayout = ({ children }: Props) => {
 	return (
-		<div className='flex h-screen w-full overflow-hidden bg-blue-200'>
+		<div className='flex w-full h-screen overflow-hidden'>
 			<Sidebar />
 			<main className='flex-1'>{children}</main>
 		</div>

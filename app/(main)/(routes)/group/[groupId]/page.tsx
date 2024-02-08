@@ -1,5 +1,6 @@
-import { ChatInput } from '@/components/chat-input'
-import { ChatMessages } from '@/components/chat-messages'
+import { ChatHeader } from '@/components/chat/chat-header'
+import { ChatInput } from '@/components/chat/chat-input'
+import { ChatMessages } from '@/components/chat/chat-messages'
 import { currentProfile } from '@/lib/current-profile'
 import { db } from '@/lib/prisma'
 
@@ -28,7 +29,9 @@ const GroupId = async ({ params }: Props) => {
 	if (!group?.conversation?.id) return
 
 	return (
-		<>
+		<main className='flex flex-col w-full h-screen'>
+			<ChatHeader name={group.name} />
+
 			<ChatMessages
 				apiUrl='/api/messages'
 				query={{
@@ -37,8 +40,10 @@ const GroupId = async ({ params }: Props) => {
 				}}
 				name='Global chat'
 				type='conversation'
-				_data={data}
+				profile={data}
+				className='px-3 pb-2'
 			/>
+
 			<ChatInput
 				apiUrl='/api/socket/messages'
 				query={{
@@ -46,7 +51,7 @@ const GroupId = async ({ params }: Props) => {
 				}}
 				type='grupal'
 			/>
-		</>
+		</main>
 	)
 }
 
