@@ -67,7 +67,7 @@ export const ChatInput = ({ apiUrl, query, type }: Props) => {
 							<Input
 								{...field}
 								disabled={isLoading}
-								className='pr-16 focus:ring-0'
+								className='pr-16 focus:ring-0 resize-none'
 							/>
 							<div className='absolute top-0 right-8'>
 								<EmojiPicker

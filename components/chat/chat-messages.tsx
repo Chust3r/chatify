@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 import { MessageWithProfile } from '@/types/types'
 import { Profile } from '@prisma/client'
 import { Loader2 } from 'lucide-react'
-import { Fragment } from 'react'
+import { Fragment, useEffect, useRef } from 'react'
 import { ChatMessage } from './chat-message'
 
 interface Props {
@@ -41,6 +41,18 @@ export const ChatMessages = ({
 
 	useChatSocket({ queryKey, addKey, updateKey: '' })
 
+	const ref = useRef<HTMLDivElement>(null)
+
+	useEffect(() => {
+		if (ref.current) {
+			ref.current.scrollBy({
+				top: ref.current.scrollHeight,
+				behavior: 'instant',
+			})
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [data?.pages[0].items.length])
+
 	if (status === 'loading') {
 		return (
 			<div className='grid w-full h-full place-content-center'>
@@ -50,12 +62,13 @@ export const ChatMessages = ({
 	}
 
 	return (
-		<ScrollArea className='flex-1'>
+		<ScrollArea className='flex-1' ref={ref}>
 			<div
 				className={cn(
 					'flex flex-col-reverse w-full gap-3 h-full',
 					className
 				)}
+				ref={ref}
 			>
 				{data?.pages.map((group, index) => (
 					<Fragment key={index}>

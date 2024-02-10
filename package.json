@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prod":"next build & next start"
+    "prod": "next build & next start"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.29.5",
@@ -36,8 +36,7 @@
     "socket.io-client": "^4.7.4",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
-    "yup": "^1.3.3",
-    "zod": "^3.22.4"
+    "yup": "^1.3.3"
   },
   "devDependencies": {
     "@types/node": "^20",

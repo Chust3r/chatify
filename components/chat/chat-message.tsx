@@ -21,7 +21,7 @@ export const ChatMessage = ({ message, profile }: Props) => {
 					<AvatarFallback>{message.sender.name[0]}</AvatarFallback>
 				</Avatar>
 				<div className='flex flex-col bg-slate-200 text-foreground rounded-xl px-3 py-2 max-w-[31.25rem] w-fit'>
-					<p className='text-sm'>{message.content}</p>
+					<p className='text-sm break-words'>{message.content}</p>
 				</div>
 			</div>
 		</div>

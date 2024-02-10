@@ -1,8 +1,9 @@
+import { Indicator } from '@/components/indicator'
 import { currentProfile } from '@/lib/current-profile'
 import { db } from '@/lib/prisma'
 import { UserButton } from '@clerk/nextjs'
 import Link from 'next/link'
-import { Indicator } from '@/components/indicator'
+import { Avatar, AvatarFallback } from './ui/avatar'
 
 export const Sidebar = async () => {
 	const profile = await currentProfile()
@@ -17,9 +18,6 @@ export const Sidebar = async () => {
 				some: { profileId: profile.id },
 			},
 		},
-		include: {
-			profile: true,
-		},
 	})
 
 	return (
@@ -29,7 +27,14 @@ export const Sidebar = async () => {
 			<div className='flex flex-col gap-2 px-5 py-10'>
 				{groups.map((group) => (
 					<Link key={group.id} href={`/group/${group.id}`}>
-						{group.name}
+						<div className='flex gap-2 items-center'>
+							<Avatar>
+								<AvatarFallback className='bg-blue-500 text-white'>
+									G
+								</AvatarFallback>
+							</Avatar>
+							<span>{group.name}</span>
+						</div>
 					</Link>
 				))}
 			</div>
