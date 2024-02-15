@@ -30,7 +30,7 @@ const GroupId = async ({ params }: Props) => {
 
 	return (
 		<main className='flex flex-col w-full h-screen'>
-			<ChatHeader name={group.name} />
+			<ChatHeader name={group.name} imageUrl={group.imageUrl!} />
 
 			<ChatMessages
 				apiUrl='/api/messages'

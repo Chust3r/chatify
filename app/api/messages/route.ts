@@ -41,7 +41,7 @@ export const GET = async (req: Request) => {
 					sender: true,
 				},
 				orderBy: {
-					createdAt: 'desc',
+					createdAt: 'asc',
 				},
 			})
 		} else {
@@ -54,7 +54,7 @@ export const GET = async (req: Request) => {
 					sender: true,
 				},
 				orderBy: {
-					createdAt: 'desc',
+					createdAt: 'asc',
 				},
 			})
 		}

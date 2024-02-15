@@ -2,6 +2,7 @@ import { cn } from '@/lib/utils'
 import { MessageWithProfile } from '@/types/types'
 import { Profile } from '@prisma/client'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
+import { format } from 'date-fns'
 
 interface Props {
 	profile: Profile
@@ -9,19 +10,25 @@ interface Props {
 }
 
 export const ChatMessage = ({ message, profile }: Props) => {
+	const isProfileSender = profile.id === message.sender.id
+
 	return (
-		<div>
-			<div
-				className={cn('flex gap-2 ', {
-					'self-end flex-row-reverse': profile.id === message.sender.id,
-				})}
-			>
-				<Avatar>
-					<AvatarImage src={message.sender.imageUrl} />
-					<AvatarFallback>{message.sender.name[0]}</AvatarFallback>
+		<div className='w-full flex justify-center  mb-2 relative min-w-[500px]'>
+			<div className=' mr-4'>
+				<Avatar className='w-8 h-8'>
+					<AvatarImage src={profile.imageUrl!} />
 				</Avatar>
-				<div className='flex flex-col bg-slate-200 text-foreground rounded-xl px-3 py-2 max-w-[31.25rem] w-fit'>
-					<p className='text-sm break-words'>{message.content}</p>
+			</div>
+			<div className='w-[90%] flex items-start'>
+				<div className='w-full'>
+					<div className='w-fit max-w-[75%] rounded-xl bg-[#f2f2f2] p-3 relative overflow-hidden'>
+						<div className='flex w-full h-full text-sm gap-1 pr-10 relative '>
+							<p>{message.content}</p>
+							<span className='h-fit  flex text-[9px] absolute -bottom-1 right-0 select-none'>
+								{format(new Date(message.createdAt), 'p')}
+							</span>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

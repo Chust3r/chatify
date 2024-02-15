@@ -16,7 +16,7 @@ interface EmojiPickerProps {
 export const EmojiPicker = ({ onChange }: EmojiPickerProps) => {
 	return (
 		<Popover>
-			<PopoverTrigger >
+			<PopoverTrigger>
 				<SmileIcon className='w-5 h-5 transition text-muted-foreground hover:text-foreground' />
 			</PopoverTrigger>
 			<PopoverContent
@@ -25,7 +25,7 @@ export const EmojiPicker = ({ onChange }: EmojiPickerProps) => {
 				side='right'
 			>
 				<Picker
-					emojiSize={18}
+					emojiSize={22}
 					theme='light'
 					data={data}
 					maxFrequentRows={1}

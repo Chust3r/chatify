@@ -7,50 +7,47 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev"
+  url      = "file:./dev.sql"
 }
 
-
-
 model Profile {
-  id String @id @default(uuid())
-  userId String @unique
-  name String
-  imageUrl String 
-  email String
+  id       String @id @default(uuid())
+  userId   String @unique
+  name     String
+  imageUrl String
+  email    String
 
   // → RELATIONS 
 
-  friends Friend[]
-  members Member[]
-  groups Group[]
+  friends  Friend[]
+  members  Member[]
+  groups   Group[]
   messages Message[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-
 model Friend {
-  id String @id @default(uuid())
+  id        String  @id @default(uuid())
   profileId String
-  profile Profile @relation(fields: [profileId],references: [id],onDelete: Cascade)
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   @@index([profileId])
 }
 
-
-model Group{
-  id String @id @default(uuid())
-  name String
+model Group {
+  id         String  @id @default(uuid())
+  name       String
+  imageUrl   String?
   inviteCode String
 
   // → RELATIONS 
 
   profileId String
-  profile Profile @relation(fields: [profileId],references: [id],onDelete: Cascade)
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
-  members Member[]
+  members      Member[]
   conversation Conversation?
 
   createdAt DateTime @default(now())
@@ -59,19 +56,18 @@ model Group{
   @@index([profileId])
 }
 
- 
 // → role ADMIN / GUEST
 
 model Member {
-  id String @id @default(uuid())
+  id        String  @id @default(uuid())
   profileId String
-  profile Profile @relation(fields: [profileId],references: [id],onDelete: Cascade)
-  role String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  role      String
 
   // → RELATIONS
 
   groupId String
-  group Group @relation(fields: [groupId],references: [id],onDelete: Cascade)
+  group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -80,20 +76,19 @@ model Member {
   @@index([groupId])
 }
 
-
-model Message{
-  id String @id @default(uuid())
+model Message {
+  id      String  @id @default(uuid())
   content String
   fileUrl String?
 
   // → RELATIONS
   conversationId String
-  conversation Conversation @relation(fields: [conversationId],references: [id],onDelete: Cascade)
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 
   senderId String
-  sender Profile @relation(fields: [senderId],references: [id])
+  sender   Profile @relation(fields: [senderId], references: [id],onDelete: Cascade)
 
-  deleted Boolean @default(false)
+  deleted   Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -103,20 +98,17 @@ model Message{
 
 //→ Type Individual / Grupal
 
-model Conversation{
-  id String @id @default(uuid())
+model Conversation {
+  id   String @id @default(uuid())
   type String
 
   messages Message[]
 
   groupId String @unique
-  group Group @relation(fields: [groupId],references: [id])
+  group   Group  @relation(fields: [groupId], references: [id],onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([groupId])
 }
- 
-
-

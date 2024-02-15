@@ -20,6 +20,7 @@ CREATE TABLE "Friend" (
 CREATE TABLE "Group" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
+    "imageUrl" TEXT,
     "inviteCode" TEXT NOT NULL,
     "profileId" TEXT NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
