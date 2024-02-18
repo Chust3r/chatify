@@ -68,6 +68,7 @@ export const GET = async (req: Request) => {
 		return NextResponse.json({ items: messages, nextCursor })
 	} catch (e) {
 		console.log(['MESSAGES_ERROR'])
+		console.log(e)
 		return NextResponse.json({ message: 'Internal error' }, { status: 500 })
 	}
 }

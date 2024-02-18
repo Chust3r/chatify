@@ -3,6 +3,7 @@ import { ChatInput } from '@/components/chat/chat-input'
 import { ChatMessages } from '@/components/chat/chat-messages'
 import { currentProfile } from '@/lib/current-profile'
 import { db } from '@/lib/prisma'
+import qs from 'query-string'
 
 interface Props {
 	params: { groupId: string }
@@ -10,6 +11,8 @@ interface Props {
 
 const GroupId = async ({ params }: Props) => {
 	const { groupId } = params
+
+	// → GROUP DATA
 
 	const group = await db.group.findFirst({
 		where: {
@@ -20,13 +23,24 @@ const GroupId = async ({ params }: Props) => {
 		},
 	})
 
-	const data = await currentProfile()
+	// → PROFILE
 
-	if (!data) {
+	const profile = await currentProfile()
+
+	if (!profile) {
 		return
 	}
 
+	// → CONVERSATION
+
 	if (!group?.conversation?.id) return
+
+	// → MESSAGES
+
+	const query = {
+		groupId,
+		conversationId: group.conversation.id,
+	}
 
 	return (
 		<main className='flex flex-col w-full h-screen'>
@@ -34,13 +48,10 @@ const GroupId = async ({ params }: Props) => {
 
 			<ChatMessages
 				apiUrl='/api/messages'
-				query={{
-					groupId,
-					conversationId: group.conversation.id,
-				}}
+				query={query}
 				name='Global chat'
 				type='conversation'
-				profile={data}
+				profile={profile}
 				className='px-3 pb-2'
 			/>
 

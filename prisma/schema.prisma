@@ -37,10 +37,11 @@ model Friend {
 }
 
 model Group {
-  id         String  @id @default(uuid())
-  name       String
-  imageUrl   String?
-  inviteCode String
+  id           String   @id @default(uuid())
+  name         String
+  imageUrl     String?
+  inviteCode   String
+  lastActivity DateTime @default(now())
 
   // → RELATIONS 
 
@@ -86,7 +87,7 @@ model Message {
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 
   senderId String
-  sender   Profile @relation(fields: [senderId], references: [id],onDelete: Cascade)
+  sender   Profile @relation(fields: [senderId], references: [id], onDelete: Cascade)
 
   deleted   Boolean  @default(false)
   createdAt DateTime @default(now())
@@ -105,7 +106,7 @@ model Conversation {
   messages Message[]
 
   groupId String @unique
-  group   Group  @relation(fields: [groupId], references: [id],onDelete: Cascade)
+  group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

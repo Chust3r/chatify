@@ -1,9 +1,13 @@
 import { currentProfile } from '@/lib/current-profile'
 import { db } from '@/lib/prisma'
-import Link from 'next/link'
-import { Modal } from './modal/modal'
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
-import { UserButton } from '@clerk/nextjs'
+import { GroupActivity } from './group/group-activity'
+import { ScrollArea } from './ui/scroll-area'
+import { Input } from './ui/input'
+import { ProfileSettings } from './profile-settings'
+import { MoreVertical } from 'lucide-react'
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
+import { Button } from './ui/button'
+import { CreateGroup } from './modal/modal-create-group'
 
 export const Sidebar = async () => {
 	const profile = await currentProfile()
@@ -18,12 +22,40 @@ export const Sidebar = async () => {
 				some: { profileId: profile.id },
 			},
 		},
+		include: {
+			conversation: {
+				include: {
+					messages: {
+						take: 1,
+						orderBy: {
+							createdAt: 'desc',
+						},
+					},
+				},
+			},
+		},
+		orderBy: {
+			lastActivity: 'desc',
+		},
 	})
 
+	if (!groups) {
+		return
+	}
+
 	return (
-		<div className='w-72 h-screen bg-whiteF2F2F2 flex flex-col px-5 py-3'>
-			<div>
-				<Modal type='create-group' />
+		<div className='w-full h-screen bg-background flex flex-col pt-3'>
+			<div className='px-3 y-2'>
+				<Input placeholder='Search a chat' />
+			</div>
+			<ScrollArea className='flex flex-col w-full flex-1 h-full'>
+				{groups.map((group) => (
+					<GroupActivity group={group} key={group.id} />
+				))}
+			</ScrollArea>
+			<div className='w-full flex justify-between p-3'>
+				<ProfileSettings profile={profile} />
+				<CreateGroup />
 			</div>
 		</div>
 	)

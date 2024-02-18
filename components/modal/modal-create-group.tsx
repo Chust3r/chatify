@@ -1,10 +1,10 @@
+'use client'
 import { useForm } from 'react-hook-form'
 import * as y from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import {
 	Sheet,
 	SheetContent,
-	SheetDescription,
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger,
@@ -23,6 +23,7 @@ import axios from 'axios'
 import { useUploadFiles } from '@/hooks/use-upload-files'
 import { ChangeEvent, useState } from 'react'
 import { convertFileToBase64 } from '@/lib/convert-file-to-base-64'
+import { ListPlus } from 'lucide-react'
 
 const formSchema = y.object().shape({
 	name: y.string().required(),
@@ -71,7 +72,9 @@ export const CreateGroup = () => {
 
 	return (
 		<Sheet>
-			<SheetTrigger>Create a group</SheetTrigger>
+			<SheetTrigger>
+				<ListPlus className='text-muted-foreground' />
+			</SheetTrigger>
 			<SheetContent>
 				<SheetHeader>
 					<SheetTitle>New group</SheetTitle>

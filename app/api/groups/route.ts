@@ -25,9 +25,10 @@ export const POST = async (req: Request) => {
 		const group = await db.group.create({
 			data: {
 				name: data.name!,
-				imageUrl: data.image.url!,
+				imageUrl: data?.image?.url! || null,
 				profileId: profile.id,
 				inviteCode: '',
+				lastActivity: new Date(),
 				members: {
 					create: [
 						{
@@ -53,7 +54,8 @@ export const POST = async (req: Request) => {
 			conversation,
 		})
 	} catch (e) {
-		console.log(['ERROR_GROUP'])
+		console.log(['ERROR_CREATE_GROUP'])
+		console.log(e)
 		return Response.json({ message: 'Internal Error' }, { status: 500 })
 	}
 }

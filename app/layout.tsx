@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<ClerkProvider>
-			<html lang='en'>
+			<html lang='en' className=''>
 				<body className={inter.className}>
 					<QueryProvider>
 						<SocketProvider>{children}</SocketProvider>

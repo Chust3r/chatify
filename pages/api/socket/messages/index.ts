@@ -55,6 +55,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
 			},
 		})
 
+		//→ Update last activity
+
+		await db.group.update({
+			where: {
+				id: groupId as string,
+			},
+			data: {
+				lastActivity: new Date(),
+			},
+		})
+
 		const key = `chat:${groupId}:messages`
 
 		res.socket.server.io.emit(key, message)

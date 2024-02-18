@@ -1,15 +1,14 @@
 'use client'
 import { yupResolver } from '@hookform/resolvers/yup'
 import axios from 'axios'
-import { Paperclip, SendHorizonal } from 'lucide-react'
+import { Paperclip, Send } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import qs from 'query-string'
 import { useForm } from 'react-hook-form'
-import * as y from 'yup'
-import { EmojiPicker } from '../emoji-picker'
 import { Button } from '../ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form'
 import { Input } from '../ui/input'
+import { FormTypeChatMessage, formSchemaChatMessage } from '@/lib/form-schemas'
 
 interface Props {
 	apiUrl: string
@@ -20,20 +19,13 @@ interface Props {
 	type: 'grupal' | 'individual'
 }
 
-const formSchema = y.object({
-	content: y.string().min(1),
-	file: y.string().min(1).optional(),
-})
-
-type FormType = y.InferType<typeof formSchema>
-
-const defaultValues: FormType = {
+const defaultValues: FormTypeChatMessage = {
 	content: '',
 }
 
 export const ChatInput = ({ apiUrl, query, type }: Props) => {
-	const form = useForm<FormType>({
-		resolver: yupResolver(formSchema),
+	const form = useForm<FormTypeChatMessage>({
+		resolver: yupResolver(formSchemaChatMessage),
 		defaultValues,
 	})
 
@@ -41,7 +33,7 @@ export const ChatInput = ({ apiUrl, query, type }: Props) => {
 
 	const { control, handleSubmit, reset, getValues, setValue } = form
 
-	const onSumbit = async (data: FormType) => {
+	const onSumbit = async (data: FormTypeChatMessage) => {
 		try {
 			const url = qs.stringifyUrl({
 				url: apiUrl,
@@ -59,19 +51,18 @@ export const ChatInput = ({ apiUrl, query, type }: Props) => {
 
 	const isLoading = form.formState.isSubmitting
 
-	const handleEmoji = (emoji: string) => {
+	/* const handleEmoji = (emoji: string) => {
 		const contentValue = getValues('content')
 		setValue('content', `${contentValue}${emoji}`)
-	}
+	} */
 
 	return (
 		<Form {...form}>
 			<form
 				onSubmit={handleSubmit(onSumbit)}
 				autoComplete='off'
-				className='flex px-7 py-4 gap-2'
+				className='flex px-7 py-3 gap-2 items-center justify-center'
 			>
-				<EmojiPicker onChange={handleEmoji} />
 				<FormField
 					control={control}
 					name='file'
@@ -90,18 +81,18 @@ export const ChatInput = ({ apiUrl, query, type }: Props) => {
 					control={control}
 					name='content'
 					render={({ field }) => (
-						<FormItem className='w-full flex-1 h-10'>
+						<FormItem className='w-full flex-1 h-12'>
 							<Input
 								{...field}
-								disabled={isLoading}
-								className=' rounded-xl'
+								className=' rounded-xl resize-none h-full'
 								placeholder='Type a message'
+								disabled={isLoading}
 							/>
 						</FormItem>
 					)}
 				/>
 				<Button size='icon' variant='ghost' type='submit'>
-					<SendHorizonal className='text-muted-foreground hover:text-foreground w-5 h-5' />
+					<Send className='text-muted-foreground hover:text-foreground w-5 h-5' />
 				</Button>
 			</form>
 		</Form>
